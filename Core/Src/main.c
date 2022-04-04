@@ -7,11 +7,17 @@
 
 #include"main.h"
 
+#define milisec 0
+#define microsec 1
+
 void Error_Handler(void);
 void TIM2_Config(void);
 void SystemClockConfig(void);
 void GPIO_Config(void);
 void USART_Config(void);
+void delay_ms_us(uint8_t milisec_or_microsec, uint16_t duration);
+
+TIM_HandleTypeDef tim2;
 
 int main()
 {
@@ -20,6 +26,20 @@ int main()
 
 	while(1);
 
+}
+
+void delay_ms_us(uint8_t milisec_or_microsec, uint16_t duration)
+{
+	if(milisec_or_microsec == microsec){
+		__HAL_TIM_GET_COUNTER(&tim2) == 0;
+		while(__HAL_TIM_GET_COUNTER(&tim2) <  duration);
+	}
+	else if(milisec_or_microsec == milisec){
+		for(uint16_t i = 0; i < duration; i++){
+			__HAL_TIM_GET_COUNTER(&tim2) == 0;
+			while(__HAL_TIM_GET_COUNTER(&tim2) < 1000);
+		}
+	}
 }
 
 void GPIO_Config(void)
@@ -39,8 +59,6 @@ void GPIO_Config(void)
 
 void TIM2_Config(void)
 {
-	TIM_HandleTypeDef tim2;
-
 	tim2.Instance = TIM2;
 	tim2.Init.Prescaler = 84 - 1; // 1us
 	tim2.Init.Period = 0xffff - 1; //1us each tick
