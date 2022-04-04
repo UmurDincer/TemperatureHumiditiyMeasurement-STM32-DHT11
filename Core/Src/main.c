@@ -33,6 +33,8 @@ void GPIO_Config(void)
 
 	HAL_GPIO_Init(GPIOA, &button);
 
+	HAL_NVIC_SetPriority(EXTI0_IRQn, 15, 0);
+	HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 }
 
 void TIM2_Config(void)
