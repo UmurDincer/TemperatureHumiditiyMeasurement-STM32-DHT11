@@ -82,7 +82,9 @@ void SystemClockConfig(void)
 	osc.PLL.PLLN = 336;		// for max clock = 168MHz, APB1 Clk = 42MhHz, APB2 Clk = 84MHz
 	osc.PLL.PLLP = 2;		//
 
-	HAL_RCC_OscConfig(&osc);
+	if(HAL_RCC_OscConfig(&osc) != HAL_OK){
+		Error_Handler();
+	}
 
 	clk.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK ;
 	clk.ClockType = RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK \
