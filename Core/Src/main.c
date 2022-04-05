@@ -7,17 +7,12 @@
 
 #include"main.h"
 
-#define milisec 0
-#define microsec 1
 
 void Error_Handler(void);
-void TIM2_Config(void);
 void SystemClockConfig(void);
 void GPIO_Config(void);
 void USART_Config(void);
-void delay_ms_us(uint8_t milisec_or_microsec, uint16_t duration);
 
-TIM_HandleTypeDef tim2;
 
 int main()
 {
@@ -28,19 +23,6 @@ int main()
 
 }
 
-void delay_ms_us(uint8_t milisec_or_microsec, uint16_t duration)
-{
-	if(milisec_or_microsec == microsec){
-		__HAL_TIM_GET_COUNTER(&tim2) == 0;
-		while(__HAL_TIM_GET_COUNTER(&tim2) <  duration);
-	}
-	else if(milisec_or_microsec == milisec){
-		for(uint16_t i = 0; i < duration; i++){
-			__HAL_TIM_GET_COUNTER(&tim2) == 0;
-			while(__HAL_TIM_GET_COUNTER(&tim2) < 1000);
-		}
-	}
-}
 
 void GPIO_Config(void)
 {
@@ -57,20 +39,6 @@ void GPIO_Config(void)
 	HAL_NVIC_EnableIRQ(EXTI0_IRQn);
 }
 
-void TIM2_Config(void)
-{
-	tim2.Instance = TIM2;
-	tim2.Init.Prescaler = 84 - 1; // 1us
-	tim2.Init.Period = 0xffff - 1; //1us each tick
-	tim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-	tim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-	tim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-
-	if(HAL_TIM_Base_Init(&tim2) != HAL_OK){
-		Error_Handler();
-	}
-
-}
 
 void USART_Config(void)
 {
