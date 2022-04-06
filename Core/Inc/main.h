@@ -2,7 +2,7 @@
  * main.h
  *
  *  Created on: Apr 4, 2022
- *      Author: ASUS
+ *      Author: Umur Edip Dincer
  */
 
 #ifndef INC_MAIN_H_
