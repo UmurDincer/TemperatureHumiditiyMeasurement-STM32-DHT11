@@ -6,23 +6,59 @@
  */
 
 #include"main.h"
-
+#include<stdio.h>
+#include<string.h>
 
 void Error_Handler(void);
 void SystemClockConfig(void);
 void GPIO_Config(void);
 void USART_Config(void);
+void Sensor_Congif(void);
 
-
+DHT11_HandleTypeDef dht11;
+UART_HandleTypeDef uart2;
+char *user_data = "Press the button for measuring the temperature and humidity.\r\n";
 int main()
 {
 	HAL_Init();
+	SystemClockConfig();
+	GPIO_Config();
+	USART_Config();
+	Sensor_Congif();
 
+	if(HAL_UART_Transmit(&uart2, (uint8_t*)user_data, (uint16_t)strlen(user_data), HAL_MAX_DELAY) != HAL_OK)
+	 {
+		 Error_Handler();
+	 }
 
 	while(1);
 
 }
 
+char data_buffer[50];
+
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{
+
+
+  if(read_DHT11(&dht11) != HAL_OK)
+  {
+	  Error_Handler();
+  }
+
+  sprintf(data_buffer, "Humidity = %d %%\r\nTemperature = %d Celcius\r\n", dht11.humidity, dht11.temperature);
+  if(HAL_UART_Transmit(&uart2,(uint8_t*) data_buffer, (uint16_t)strlen(data_buffer), HAL_MAX_DELAY) != HAL_OK){
+	  Error_Handler();
+  }
+}
+
+void Sensor_Congif(void)
+{
+	memset(&dht11, 0, sizeof(DHT11_HandleTypeDef));
+	dht11.GPIOx = GPIOD;
+	dht11.Sensor_Pin = GPIO_PIN_5;
+	DHT11_Init(&dht11);
+}
 
 void GPIO_Config(void)
 {
@@ -42,10 +78,8 @@ void GPIO_Config(void)
 
 void USART_Config(void)
 {
-	UART_HandleTypeDef uart2;
-
 	uart2.Instance = USART2;
-	uart2.Init.BaudRate = 9600;
+	uart2.Init.BaudRate = 115200;
 	uart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
 	uart2.Init.Mode = UART_MODE_TX_RX;
 	uart2.Init.WordLength = UART_WORDLENGTH_8B;

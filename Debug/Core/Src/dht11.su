@@ -1,4 +1,4 @@
-../Core/Src/dht11.c:13:6:delay_ms_us	24	static
-../Core/Src/dht11.c:27:6:DHT11_Init	16	static
-../Core/Src/dht11.c:47:6:set_DHT11_input_output	16	static
-../Core/Src/dht11.c:59:9:read_DHT11	24	static
+../Core/Src/dht11.c:14:6:delay_ms_us	24	static
+../Core/Src/dht11.c:32:6:DHT11_Init	24	static
+../Core/Src/dht11.c:54:6:set_DHT11_input_output	16	static
+../Core/Src/dht11.c:66:9:read_DHT11	24	static

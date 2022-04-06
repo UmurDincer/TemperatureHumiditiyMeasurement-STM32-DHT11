@@ -36,6 +36,14 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart)
      gpio_uart2.Mode = GPIO_MODE_AF_PP;
      gpio_uart2.Pull = GPIO_PULLUP;
      gpio_uart2.Pin = GPIO_PIN_2; // Tx
-
+     gpio_uart2.Speed = GPIO_SPEED_FREQ_LOW;
      HAL_GPIO_Init(GPIOA, &gpio_uart2);
+
+     gpio_uart2.Pin = GPIO_PIN_3; //UART2_RX
+ 	 HAL_GPIO_Init(GPIOA,&gpio_uart2);
+
+ 	HAL_NVIC_EnableIRQ(USART2_IRQn);
+ 	HAL_NVIC_SetPriority(USART2_IRQn, 15, 0);
+
+
 }
